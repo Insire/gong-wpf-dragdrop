@@ -176,11 +176,11 @@ namespace Showcase.WPF.DragDrop.Models
       switch (dropInfo.Data)
       {
         case ItemModel _:
-          dropInfo.Effects = DragDropEffects.Link;
+          dropInfo.Effects = DragDropEffects.All;
           break;
 
         case SubItemModel _:
-          dropInfo.Effects = DragDropEffects.Link;
+          dropInfo.Effects = DragDropEffects.All;
           break;
       }
     }

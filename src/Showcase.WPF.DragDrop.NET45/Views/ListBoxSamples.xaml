@@ -374,18 +374,20 @@
                                          ItemsSource="{Binding Data.FilterCollection2}">
                                     <ListBox.Resources>
                                         <DataTemplate DataType="{x:Type models:ItemModel}">
-                                            <Expander dd:DragDrop.DropHandler="{Binding DropTarget}"
-                                                      dd:DragDrop.IsDragSource="True"
-                                                      dd:DragDrop.IsDropTarget="True"
-                                                      dd:DragDrop.UseDefaultDragAdorner="True"
-                                                      Header="{Binding Caption}">
+                                            <Expander>
+                                                <Expander.Header>
+                                                    <TextBlock dd:DragDrop.DropHandler="{Binding DropTarget}"
+                                                               dd:DragDrop.IsDragSource="True"
+                                                               dd:DragDrop.IsDropTarget="True"
+                                                               dd:DragDrop.UseDefaultDragAdorner="True"
+                                                               Text="{Binding Caption}" />
+                                                </Expander.Header>
                                                 <ListBox Width="200"
                                                          Height="150"
                                                          HorizontalContentAlignment="Stretch"
                                                          dd:DragDrop.IsDragSource="True"
                                                          dd:DragDrop.IsDropTarget="True"
                                                          dd:DragDrop.UseDefaultDragAdorner="True"
-                                                         Background="DarkOrange"
                                                          ItemsSource="{Binding SubItemCollection}">
                                                     <ListBox.ItemTemplate>
                                                         <DataTemplate DataType="{x:Type models:SubItemModel}">
