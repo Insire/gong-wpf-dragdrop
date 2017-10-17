@@ -5,6 +5,8 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using JetBrains.Annotations;
 using Showcase.WPF.DragDrop.ViewModels;
+using GongSolutions.Wpf.DragDrop;
+using System.Windows;
 
 namespace Showcase.WPF.DragDrop.Models
 {
@@ -26,13 +28,14 @@ namespace Showcase.WPF.DragDrop.Models
     {
       this.Index = itemIndex;
       this.Caption = $"Item {itemIndex}";
+      this.DropTarget = new ItemModelDropHandler();
     }
 
     public int Index { get; set; }
     public string Caption { get; set; }
+    public IDropTarget DropTarget { get; set; }
 
-    public ObservableCollection<SubItemModel> SubItemCollection { get; set; } = new ObservableCollection<SubItemModel>()
-      ;
+    public ObservableCollection<SubItemModel> SubItemCollection { get; set; } = new ObservableCollection<SubItemModel>();
 
     public string SelectedSubItem
     {
@@ -70,6 +73,37 @@ namespace Showcase.WPF.DragDrop.Models
     }
   }
 
+  public class ItemModelDropHandler : IDropTarget
+  {
+    public void DragOver(IDropInfo dropInfo)
+    {
+      switch (dropInfo.Data)
+      {
+        case ItemModel _:
+          dropInfo.Effects = DragDropEffects.Move;
+          break;
+
+        case SubItemModel _:
+          dropInfo.Effects = DragDropEffects.Move;
+          break;
+      }
+    }
+
+    public void Drop(IDropInfo dropInfo)
+    {
+      switch (dropInfo.Data)
+      {
+        case ItemModel _:
+          MessageBox.Show(typeof(ItemModel).Name + " was dropped in " + typeof(ItemModelDropHandler).Name);
+          break;
+
+        case SubItemModel _:
+          MessageBox.Show(typeof(SubItemModel).Name + " was dropped in " + typeof(ItemModelDropHandler).Name);
+          break;
+      }
+    }
+  }
+
   public class SubItemModel : INotifyPropertyChanged
   {
     private string _bindableValue;
@@ -80,8 +114,10 @@ namespace Showcase.WPF.DragDrop.Models
     {
       this.Caption = caption;
       this.ButtonTestCommand = new SimpleCommand(o => { this.BindableValue = $"Button clicked at {DateTime.UtcNow.ToLocalTime()}"; });
+      this.DropTarget = new SubItemDropHandler();
     }
 
+    public IDropTarget DropTarget { get; set; }
     public string Caption { get; set; }
 
     public ICommand ButtonTestCommand { get; set; }
@@ -130,6 +166,37 @@ namespace Showcase.WPF.DragDrop.Models
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+  }
+
+  public class SubItemDropHandler : IDropTarget
+  {
+    public void DragOver(IDropInfo dropInfo)
+    {
+      switch (dropInfo.Data)
+      {
+        case ItemModel _:
+          dropInfo.Effects = DragDropEffects.Link;
+          break;
+
+        case SubItemModel _:
+          dropInfo.Effects = DragDropEffects.Link;
+          break;
+      }
+    }
+
+    public void Drop(IDropInfo dropInfo)
+    {
+      switch (dropInfo.Data)
+      {
+        case ItemModel _:
+          MessageBox.Show(typeof(ItemModel).Name + " was dropped in " + typeof(SubItemDropHandler).Name);
+          break;
+
+        case SubItemModel _:
+          MessageBox.Show(typeof(SubItemModel).Name + " was dropped in " + typeof(SubItemDropHandler).Name);
+          break;
+      }
     }
   }
 }

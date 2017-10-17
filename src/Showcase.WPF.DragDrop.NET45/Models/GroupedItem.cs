@@ -27,7 +27,6 @@ namespace Showcase.WPF.DragDrop.Models
     }
 
     public string Group
-
     {
       get { return _group; }
       set
